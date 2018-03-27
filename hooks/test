@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -e
 
 . ./hooks/env
 
@@ -21,32 +21,21 @@ function retry {
 }
 
 function finish {
+  RESULT=$?
   [ -n "$CID1" ] && docker logs ${CID1}
-  [ -n "$CID1" ] && docker rm -f $CID1
-  [ -n "$CONSULID" ] && docker rm -f $CONSULID
+  [ -n "$CID1" ] && docker rm -f ${CID1}
+  [ $RESULT = 0 ] && echo "PASS" || echo "FAIL"
 }
 trap finish EXIT
-
-function passing_service {
-  docker run --rm --network container:${CONSULID} appropriate/curl -s http://localhost:8500/v1/health/state/passing | grep -q "ServiceName.*$1"
-}
 
 function container_healthy {
   docker inspect $1 | grep -q \"Status\".*\"healthy\"
 }
 
 # setup
-CONSULID=$(docker run -d -e CONSUL_DEV=1 pdouble16/autopilotpattern-consul:1.0.2-r2)
-CID1=$(docker run -d -e CONSUL_AGENT=1 -e CONSUL=consul --link ${CONSULID}:consul $IMAGE_NAME)
+CID1=$(docker run -d $IMAGE_NAME)
 
 # tests
-retry 60 passing_service prometheus
-
 retry 125 container_healthy ${CID1}
 
-retry 5 docker run --rm --network container:${CONSULID} appropriate/curl -s -o /dev/null http://localhost:9090/metrics
-retry 5 passing_service containerpilot
-
-retry 5 docker run --rm --network container:${CONSULID} appropriate/curl -s -o /dev/null http://localhost:9100/metrics
-retry 5 passing_service node-exporter
-
+retry 5 docker run --rm --network container:${CID1} appropriate/curl -s -o /dev/null http://localhost:80/colplot/
