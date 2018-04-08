@@ -1,7 +1,6 @@
 # collectl-utils-docker
 
-The collectl-utils package processes and graphs collectl output. This is a container to provide
-the package is an easy to consume form.
+The collectl-utils package processes and graphs collectl output. This is a container to provide the package is an easy to consume form.
 
 ## Input Files
 
