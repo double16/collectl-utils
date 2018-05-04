@@ -1,5 +1,6 @@
 FROM debian:stretch-slim
 
+ARG DOCKERFILE_PATH
 ARG BUILD_DATE
 ARG SOURCE_REF
 ARG SOURCE_TYPE
@@ -28,7 +29,7 @@ LABEL maintainer="Patrick Double <pat@patdouble.com>" \
     org.label-schema.vendor="https://github.com/double16" \
     org.label-schema.name="collectl-utils" \
     org.label-schema.url="https://github.com/double16/collectl-utils" \
-    org.label-schema.docker.dockerfile="Dockerfile" \
+    org.label-schema.docker.dockerfile="${DOCKERFILE_PATH}/Dockerfile" \
     org.label-schema.vcs-ref=$SOURCE_REF \
     org.label-schema.vcs-type=$SOURCE_TYPE \
     org.label-schema.vcs-url="https://github.com/double16/collectl-utils.git"
