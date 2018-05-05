@@ -4,11 +4,7 @@ The collectl-utils package processes and graphs collectl output. This is a conta
 
 ## Input Files
 
-The `/input` volume should contain the collectl recorded files.
-
-## Output Files
-
-The `/output` volume is intended to hold the output files.
+The `/input` volume should contain the collectl recorded files. In either `.raw` or `.raw.gz` format.
 
 ## User Interface
 
@@ -19,7 +15,7 @@ Map port 80 to 8080, or a randomly assigned port. Point your browser to `http://
 ### Start a colplot server
 
 ```shell
-$ docker run -P -d -v $(pwd)/input:/input pdouble16/collectl-utils
+$ docker run -P -d -v $(pwd)/input:/input pdouble16/collectl-utils:latest
 ```
 
 ### Replay a raw file
